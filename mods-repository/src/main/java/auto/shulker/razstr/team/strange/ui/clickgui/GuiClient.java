@@ -4,6 +4,7 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
+import auto.shulker.razstr.team.ChatCommand;
 import auto.shulker.razstr.team.ModConfig;
 import auto.shulker.razstr.team.strange.Strange;
 import auto.shulker.razstr.team.strange.module.Theme;
@@ -18,6 +19,8 @@ import auto.shulker.razstr.team.strange.ui.clickgui.mouse.GuiMouseClicked;
 import auto.shulker.razstr.team.strange.ui.clickgui.render.GuiRender;
 
 public class GuiClient extends Screen {
+
+    private String currentCommand = "";
 
     public GuiClient() {
         super(Text.literal("Gui"));
@@ -77,6 +80,7 @@ public class GuiClient extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
+        // Проверяем бинды модулей
         for (Category c : Category.values()) {
             for (Module m : Strange.get.manager.getType(c)) {
                 if (m.binding) {
@@ -102,11 +106,49 @@ public class GuiClient extends Screen {
                 }
             }
         }
+
+        // Проверяем команды (если открыт гайд и команда начинается с точки)
+        if (keyCode == GLFW.GLFW_KEY_ENTER && currentCommand.startsWith(".")) {
+            ChatCommand.handleCommand(currentCommand);
+            currentCommand = "";
+            return true;
+        }
+
+        // Удаляем последний символ команды при Backspace
+        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && currentCommand.length() > 0) {
+            currentCommand = currentCommand.substring(0, currentCommand.length() - 1);
+            return true;
+        }
+
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
 
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
+        // Если нет активного StringSetting, добавляем символ к команде
+        boolean hasActiveSetting = false;
+        for (Category c : Category.values()) {
+            for (Module m : Strange.get.manager.getType(c)) {
+                for (Setting setting : m.getSettingsForGUI()) {
+                    if (setting instanceof StringSetting) {
+                        StringSetting s = (StringSetting) setting;
+                        if (s.active) {
+                            hasActiveSetting = true;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+
+        if (!hasActiveSetting && (codePoint == '.' || currentCommand.length() > 0)) {
+            if (currentCommand.length() < 100) { // Ограничиваем длину команды
+                currentCommand += codePoint;
+            }
+            return true;
+        }
+
+        // Обработка StringSetting
         for (Category c : Category.values()) {
             for (Module m : Strange.get.manager.getType(c)) {
                 for (Setting setting : m.getSettingsForGUI()) {
