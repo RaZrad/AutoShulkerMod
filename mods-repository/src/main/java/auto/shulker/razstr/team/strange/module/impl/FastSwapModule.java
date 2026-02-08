@@ -34,7 +34,7 @@ public class FastSwapModule extends Module {
                 ModConfig.fastSwapDelay = value;
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapDelay = 50;
-                mainDelay.set("50");
+                // mainDelay.set("50"); // Removed recursive call
             }
         };
 
@@ -51,7 +51,7 @@ public class FastSwapModule extends Module {
                 ModConfig.fastSwapItem1Delay = value;
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapItem1Delay = 50;
-                item1Delay.set("50");
+                // item1Delay.set("50"); // Removed recursive call
             }
         };
 
@@ -70,7 +70,7 @@ public class FastSwapModule extends Module {
                 ModConfig.fastSwapItem2Delay = value;
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapItem2Delay = 50;
-                item2Delay.set("50");
+                // item2Delay.set("50"); // Removed recursive call
             }
         };
 
@@ -89,7 +89,7 @@ public class FastSwapModule extends Module {
                 ModConfig.fastSwapItem3Delay = value;
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapItem3Delay = 50;
-                item3Delay.set("50");
+                // item3Delay.set("50"); // Removed recursive call
             }
         };
 

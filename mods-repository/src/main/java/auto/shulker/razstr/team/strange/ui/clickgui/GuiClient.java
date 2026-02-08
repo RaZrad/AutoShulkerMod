@@ -17,10 +17,12 @@ import auto.shulker.razstr.team.strange.module.impl.AutoCraftModule;
 import auto.shulker.razstr.team.strange.module.impl.AutoShulkerFarmModule;
 import auto.shulker.razstr.team.strange.ui.clickgui.mouse.GuiMouseClicked;
 import auto.shulker.razstr.team.strange.ui.clickgui.render.GuiRender;
+import auto.shulker.razstr.team.strange.ui.clickgui.ParticleEffect;
 
 public class GuiClient extends Screen {
 
     private String currentCommand = "";
+    private ParticleEffect particleEffect;
 
     public GuiClient() {
         super(Text.literal("Gui"));
@@ -39,10 +41,23 @@ public class GuiClient extends Screen {
         GuiScreen.height = 217;
         GuiScreen.x = this.width / 2f - GuiScreen.width / 2f;
         GuiScreen.y = this.height / 2f - GuiScreen.height / 2f;
+        
+        // Инициализируем эффект частиц
+        particleEffect = new ParticleEffect(
+            GuiScreen.x, GuiScreen.y,
+            GuiScreen.width, GuiScreen.height
+        );
     }
 
     @Override
     public void render(DrawContext context, int mouseX, int mouseY, float deltaTicks) {
+        // Обновляем и рисуем частицы
+        if (particleEffect != null) {
+            particleEffect.setBounds(GuiScreen.x, GuiScreen.y, GuiScreen.width, GuiScreen.height);
+            particleEffect.update(mouseX, mouseY);
+            particleEffect.render(context);
+        }
+
         super.render(context, mouseX, mouseY, deltaTicks);
         ThemeManager.update();
         GuiRender.renderGui(context, mouseX, mouseY, deltaTicks);
@@ -80,7 +95,6 @@ public class GuiClient extends Screen {
 
     @Override
     public boolean keyPressed(int keyCode, int scanCode, int modifiers) {
-        // Проверяем бинды модулей
         for (Category c : Category.values()) {
             for (Module m : Strange.get.manager.getType(c)) {
                 if (m.binding) {
@@ -107,8 +121,8 @@ public class GuiClient extends Screen {
             }
         }
 
-        // Проверяем команды (если открыт гайд и команда начинается с точки)
-        if (keyCode == GLFW.GLFW_KEY_ENTER && currentCommand.startsWith(".")) {
+        // Обработка команды .bind локально (НЕ отправляется в чат!)
+        if (keyCode == GLFW.GLFW_KEY_ENTER && currentCommand.startsWith(".bind ")) {
             ChatCommand.handleCommand(currentCommand);
             currentCommand = "";
             return true;
@@ -125,37 +139,12 @@ public class GuiClient extends Screen {
 
     @Override
     public boolean charTyped(char codePoint, int modifiers) {
-        // Если нет активного StringSetting, добавляем символ к команде
-        boolean hasActiveSetting = false;
+        // Если есть активное StringSetting, не обрабатываем команды
         for (Category c : Category.values()) {
             for (Module m : Strange.get.manager.getType(c)) {
                 for (Setting setting : m.getSettingsForGUI()) {
                     if (setting instanceof StringSetting) {
                         StringSetting s = (StringSetting) setting;
-                        if (s.active) {
-                            hasActiveSetting = true;
-                            break;
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!hasActiveSetting && (codePoint == '.' || currentCommand.length() > 0)) {
-            if (currentCommand.length() < 100) { // Ограничиваем длину команды
-                currentCommand += codePoint;
-            }
-            return true;
-        }
-
-        // Обработка StringSetting
-        for (Category c : Category.values()) {
-            for (Module m : Strange.get.manager.getType(c)) {
-                for (Setting setting : m.getSettingsForGUI()) {
-                    if (setting instanceof StringSetting) {
-                        StringSetting s = (StringSetting) setting;
-                        if (s.hidden.get()) continue;
-
                         if (s.active) {
                             if (codePoint >= 32 && codePoint != 127) {
                                 s.set(s.input + codePoint);
@@ -166,6 +155,15 @@ public class GuiClient extends Screen {
                 }
             }
         }
+
+        // Добавляем символ к команде, если она начинается с точки или уже продолжается
+        if (codePoint == '.' || currentCommand.length() > 0) {
+            if (currentCommand.length() < 100) {
+                currentCommand += codePoint;
+            }
+            return true;
+        }
+
         return super.charTyped(codePoint, modifiers);
     }
 
