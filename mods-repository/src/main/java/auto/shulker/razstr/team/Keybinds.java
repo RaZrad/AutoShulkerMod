@@ -19,20 +19,41 @@ public class Keybinds {
 
         FAST_SWAP_1 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.autoshulker.fast_swap_1",
-                GLFW.GLFW_KEY_F1,
+                ModConfig.fastSwapItem1KeyCode,
                 "category.autoshulker"
         ));
 
         FAST_SWAP_2 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.autoshulker.fast_swap_2",
-                GLFW.GLFW_KEY_F2,
+                ModConfig.fastSwapItem2KeyCode,
                 "category.autoshulker"
         ));
 
         FAST_SWAP_3 = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.autoshulker.fast_swap_3",
-                GLFW.GLFW_KEY_F3,
+                ModConfig.fastSwapItem3KeyCode,
                 "category.autoshulker"
         ));
+    }
+
+    /**
+     * Обновляет KeyCode для FastSwap 1
+     */
+    public static void setFastSwap1KeyCode(int keyCode) {
+        ModConfig.fastSwapItem1KeyCode = keyCode;
+    }
+
+    /**
+     * Обновляет KeyCode для FastSwap 2
+     */
+    public static void setFastSwap2KeyCode(int keyCode) {
+        ModConfig.fastSwapItem2KeyCode = keyCode;
+    }
+
+    /**
+     * Обновляет KeyCode для FastSwap 3
+     */
+    public static void setFastSwap3KeyCode(int keyCode) {
+        ModConfig.fastSwapItem3KeyCode = keyCode;
     }
 }

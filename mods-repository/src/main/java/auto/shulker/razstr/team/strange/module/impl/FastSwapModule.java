@@ -2,18 +2,23 @@ package auto.shulker.razstr.team.strange.module.impl;
 
 import auto.shulker.razstr.team.ModConfig;
 import auto.shulker.razstr.team.FastSwapLogic;
+import auto.shulker.razstr.team.Keybinds;
 import auto.shulker.razstr.team.strange.module.api.Category;
 import auto.shulker.razstr.team.strange.module.api.Module;
 import auto.shulker.razstr.team.strange.module.api.setting.impl.StringSetting;
+import org.lwjgl.glfw.GLFW;
 
 public class FastSwapModule extends Module {
 
     public StringSetting item1Name;
     public StringSetting item1Delay;
+    public StringSetting item1KeyDisplay;
     public StringSetting item2Name;
     public StringSetting item2Delay;
+    public StringSetting item2KeyDisplay;
     public StringSetting item3Name;
     public StringSetting item3Delay;
+    public StringSetting item3KeyDisplay;
     public StringSetting mainDelay;
 
     public FastSwapModule() {
@@ -27,13 +32,13 @@ public class FastSwapModule extends Module {
                 if (value < 0) value = 0;
                 if (value > 1000) value = 1000;
                 ModConfig.fastSwapDelay = value;
-                mainDelay.set(String.valueOf(value));
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapDelay = 50;
                 mainDelay.set("50");
             }
         };
 
+        // FastSwap Item 1
         item1Name = new StringSetting("Предмет 1", ModConfig.fastSwapItem1Name);
         item1Name.onChange = () -> ModConfig.fastSwapItem1Name = item1Name.get();
 
@@ -44,13 +49,15 @@ public class FastSwapModule extends Module {
                 if (value < 0) value = 0;
                 if (value > 1000) value = 1000;
                 ModConfig.fastSwapItem1Delay = value;
-                item1Delay.set(String.valueOf(value));
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapItem1Delay = 50;
                 item1Delay.set("50");
             }
         };
 
+        item1KeyDisplay = new StringSetting("Бинд 1", getKeyName(ModConfig.fastSwapItem1KeyCode));
+
+        // FastSwap Item 2
         item2Name = new StringSetting("Предмет 2", ModConfig.fastSwapItem2Name);
         item2Name.onChange = () -> ModConfig.fastSwapItem2Name = item2Name.get();
 
@@ -61,13 +68,15 @@ public class FastSwapModule extends Module {
                 if (value < 0) value = 0;
                 if (value > 1000) value = 1000;
                 ModConfig.fastSwapItem2Delay = value;
-                item2Delay.set(String.valueOf(value));
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapItem2Delay = 50;
                 item2Delay.set("50");
             }
         };
 
+        item2KeyDisplay = new StringSetting("Бинд 2", getKeyName(ModConfig.fastSwapItem2KeyCode));
+
+        // FastSwap Item 3
         item3Name = new StringSetting("Предмет 3", ModConfig.fastSwapItem3Name);
         item3Name.onChange = () -> ModConfig.fastSwapItem3Name = item3Name.get();
 
@@ -78,19 +87,28 @@ public class FastSwapModule extends Module {
                 if (value < 0) value = 0;
                 if (value > 1000) value = 1000;
                 ModConfig.fastSwapItem3Delay = value;
-                item3Delay.set(String.valueOf(value));
             } catch (NumberFormatException e) {
                 ModConfig.fastSwapItem3Delay = 50;
                 item3Delay.set("50");
             }
         };
 
+        item3KeyDisplay = new StringSetting("Бинд 3", getKeyName(ModConfig.fastSwapItem3KeyCode));
+
         addSettings(
             mainDelay,
-            item1Name, item1Delay,
-            item2Name, item2Delay,
-            item3Name, item3Delay
+            item1Name, item1Delay, item1KeyDisplay,
+            item2Name, item2Delay, item2KeyDisplay,
+            item3Name, item3Delay, item3KeyDisplay
         );
+    }
+
+    /**
+     * Получает имя клавиши по KeyCode
+     */
+    private String getKeyName(int keyCode) {
+        String name = GLFW.glfwGetKeyName(keyCode, 0);
+        return name != null && !name.isEmpty() ? name : "KEY_" + keyCode;
     }
 
     @Override
