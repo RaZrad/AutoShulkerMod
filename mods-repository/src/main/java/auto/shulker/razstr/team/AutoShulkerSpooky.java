@@ -35,7 +35,11 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
         );
         KeyBindingHelper.registerKeyBinding(autoCatKey);
 
+        // Регистрируем горячие клавиши жодления
+        Keybinds.registerKeybinds();
+
         AutoCat.INSTANCE.register();
+        FastSwapLogic.INSTANCE.register();
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (openGuiKey.wasPressed()) {
@@ -44,6 +48,18 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
             if (autoCatKey.wasPressed()) {
                 AutoCat.INSTANCE.onKeyZeroPressed(client);
             }
+
+            // Обработка FastSwap горячих клавиш
+            while (Keybinds.FAST_SWAP_1.wasPressed()) {
+                FastSwapLogic.INSTANCE.triggerFastSwap(client, 1);
+            }
+            while (Keybinds.FAST_SWAP_2.wasPressed()) {
+                FastSwapLogic.INSTANCE.triggerFastSwap(client, 2);
+            }
+            while (Keybinds.FAST_SWAP_3.wasPressed()) {
+                FastSwapLogic.INSTANCE.triggerFastSwap(client, 3);
+            }
+
             AutoCat.INSTANCE.tick(client);
             AutoShulkerFarmLogic.INSTANCE.tick(client);
             AutoCraftLogic.INSTANCE.tick(client);

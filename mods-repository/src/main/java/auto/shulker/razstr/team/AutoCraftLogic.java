@@ -96,12 +96,14 @@ public class AutoCraftLogic {
         var centerStack = getStackInSlot(handler, CENTER_SLOT);
         boolean hasChestInCenter = !centerStack.isEmpty() && centerStack.getItem() == Items.CHEST;
 
+        // Приоритет 1: забрать готовый результат из слота результата
         if (!resultStack.isEmpty()) {
             sendClick(client, handler, CRAFT_RESULT_SLOT, 0, SlotActionType.QUICK_MOVE);
             ticksUntilNextAction = TICKS_BETWEEN_ACTIONS;
             return;
         }
 
+        // Приоритет 2: положить сундук в центр (если там его нет и все панцири в сетке)
         if (!hasChestInCenter && shellsInGrid >= 8) {
             int chestSlot = findChestSlot(client.player);
             if (chestSlot >= 0) {
@@ -115,6 +117,7 @@ public class AutoCraftLogic {
             }
         }
 
+        // Завершение действия "положить" для сундука
         if (stepIsPick == false && pendingSourceSlot >= 0 && pendingTargetSlot >= 0) {
             sendClick(client, handler, pendingTargetSlot, 0, SlotActionType.PICKUP);
             pendingSourceSlot = -1;
@@ -124,11 +127,13 @@ public class AutoCraftLogic {
             return;
         }
 
+        // Приоритет 3: распределить панцири по 8 слотам сетки по кругу (если не заполнено)
         if (shellsInGrid < 8) {
             int shellSlot = findShellSlot(client.player);
             if (shellSlot >= 0) {
                 int hSlot = invToHandlerSlot(shellSlot);
-                int targetGrid = SHELL_GRID_SLOTS[shellsInGrid];
+                // Используем текущее количество панцирей как индекс для распределения по кругу
+                int targetGrid = SHELL_GRID_SLOTS[shellsInGrid % 8];
                 sendClick(client, handler, hSlot, 1, SlotActionType.PICKUP);
                 pendingSourceSlot = hSlot;
                 pendingTargetSlot = targetGrid;
@@ -138,6 +143,7 @@ public class AutoCraftLogic {
             }
         }
 
+        // Если всё готово (8 панцирей + сундук в центре)
         if (hasChestInCenter && shellsInGrid >= 8) {
             ticksUntilNextAction = 5;
         }

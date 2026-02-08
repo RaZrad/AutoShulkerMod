@@ -3,6 +3,7 @@ package auto.shulker.razstr.team.strange.module.api;
 import auto.shulker.razstr.team.strange.module.impl.AutoCraftModule;
 import auto.shulker.razstr.team.strange.module.impl.AutoShulkerFarmModule;
 import auto.shulker.razstr.team.strange.module.impl.MaceDamageCheckerModule;
+import auto.shulker.razstr.team.strange.module.impl.FastSwapModule;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -15,6 +16,7 @@ public class Manager {
         module.add(new AutoShulkerFarmModule());
         module.add(new AutoCraftModule());
         module.add(new MaceDamageCheckerModule());
+        module.add(new FastSwapModule());
         module.sort(Comparator.comparing(m -> m.getDisplayName().toLowerCase()));
     }
 
