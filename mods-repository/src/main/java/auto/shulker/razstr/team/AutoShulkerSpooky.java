@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 
 public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
 
-    public static KeyBinding openGuiKey;
     public static KeyBinding autoCatKey;
 
     @Override
@@ -21,13 +20,6 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        openGuiKey = new KeyBinding(
-                "key.autoshulker.open_gui",
-                GLFW.GLFW_KEY_MINUS,
-                "category.autoshulker"
-        );
-        KeyBindingHelper.registerKeyBinding(openGuiKey);
-
         autoCatKey = new KeyBinding(
                 "key.autoshulker.auto_cat",
                 GLFW.GLFW_KEY_0,
@@ -35,14 +27,14 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
         );
         KeyBindingHelper.registerKeyBinding(autoCatKey);
 
-        // Регистрируем горячие клавиши жодления
+        // Регистрируем все горячие клавиши через Keybinds
         Keybinds.registerKeybinds();
 
         AutoCat.INSTANCE.register();
         FastSwapLogic.INSTANCE.register();
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
-            while (openGuiKey.wasPressed()) {
+            while (Keybinds.OPEN_GUI.wasPressed()) {
                 client.setScreen(new GuiClient());
             }
             if (autoCatKey.wasPressed()) {
