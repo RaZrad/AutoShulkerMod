@@ -157,15 +157,14 @@ public class MaceDamageCheckerLogic {
             }
         }
 
-        // Получаем процент зарядки булавы (от 0 до 1)
-        float chargeAmount = 0.0f;
-        if (mace.getItem() instanceof net.minecraft.item.Chargeable) {
-            chargeAmount = ((net.minecraft.item.Chargeable) mace.getItem()).getChargedAmount(mace);
-        }
+        // Получаем процент зарядки булавы
+        // В Minecraft булава работает по-другому - урон зависит от высоты падения
+        // Базовый урон всегда применяется при попадании
+        float chargeMultiplier = 1.0f;
 
-        // Итоговый урон = базовый + падение + чары, умноженный на процент зарядки
+        // Итоговый урон = базовый + падение + чары
         float totalDamage = baseDamage + fallDamage + enchantmentDamage;
-        return totalDamage * chargeAmount;
+        return totalDamage * chargeMultiplier;
     }
 
     private boolean isUndead(LivingEntity entity) {
