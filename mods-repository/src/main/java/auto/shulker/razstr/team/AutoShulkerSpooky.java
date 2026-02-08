@@ -41,20 +41,34 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
                 AutoCat.INSTANCE.onKeyZeroPressed(client);
             }
 
-            // Обработка FastSwap горячих клавиш
-            while (Keybinds.FAST_SWAP_1.wasPressed()) {
-                FastSwapLogic.INSTANCE.triggerFastSwap(client, 1);
-            }
-            while (Keybinds.FAST_SWAP_2.wasPressed()) {
-                FastSwapLogic.INSTANCE.triggerFastSwap(client, 2);
-            }
-            while (Keybinds.FAST_SWAP_3.wasPressed()) {
-                FastSwapLogic.INSTANCE.triggerFastSwap(client, 3);
+            // Обработка FastSwap горячих клавиш (по сконфигурированным клавишам)
+            if (client.options != null) {
+                // Проверяем item 1
+                if (isKeyPressed(client, ModConfig.fastSwapItem1KeyCode)) {
+                    FastSwapLogic.INSTANCE.triggerFastSwap(client, 1);
+                }
+                // Проверяем item 2
+                if (isKeyPressed(client, ModConfig.fastSwapItem2KeyCode)) {
+                    FastSwapLogic.INSTANCE.triggerFastSwap(client, 2);
+                }
+                // Проверяем item 3
+                if (isKeyPressed(client, ModConfig.fastSwapItem3KeyCode)) {
+                    FastSwapLogic.INSTANCE.triggerFastSwap(client, 3);
+                }
             }
 
             AutoCat.INSTANCE.tick(client);
             AutoShulkerFarmLogic.INSTANCE.tick(client);
             AutoCraftLogic.INSTANCE.tick(client);
         });
+    }
+
+    /**
+     * Проверяет, нажата ли клавиша с заданным KeyCode
+     */
+    private static boolean isKeyPressed(MinecraftClient client, int keyCode) {
+        if (keyCode < 0) return false;
+        long windowHandle = client.getWindow().getHandle();
+        return GLFW.glfwGetKey(windowHandle, keyCode) == GLFW.GLFW_PRESS;
     }
 }
