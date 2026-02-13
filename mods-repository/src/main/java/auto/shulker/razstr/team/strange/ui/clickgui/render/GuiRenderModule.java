@@ -24,7 +24,6 @@ public class GuiRenderModule extends GuiScreen {
         return switch (module.name) {
             case "AutoShulkerFarm" -> "autoshulkerblack";
             case "AutoCraft" -> "autocraftblack";
-            case "MaceDamageChecker" -> "macedamagecheckerblack";
             default -> selectedCategories.toString().toLowerCase();
         };
     }

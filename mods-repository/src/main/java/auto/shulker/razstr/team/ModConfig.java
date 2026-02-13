@@ -17,33 +17,21 @@ public class ModConfig {
     /** "craft" = команда /craft, "workbench" = верстак по ПКМ */
     public static String autoCraftMode = "craft";
 
-    // MaceDamageChecker
-    public static boolean maceDamageCheckerEnabled = false;
-    /** "all" = все, "players" = игроки, "mobs" = мобы, "nonliving" = неживые */
-    public static String maceDamageCheckerEntityFilter = "all";
-    /** Размер текста счетчика (1.0 = стандартный) */
-    public static float maceDamageCheckerTextScale = 1.0f;
+    // Elytra equip helper
+    public static boolean elytraEquipEnabled = false;
+    /** клавиша для функциональности: "ё" (`/~) или "x" */
+    public static String elytraEquipKey = "ё";  // выбирается через GUI
+    /** Задержка между действиями (мс), 10–1000 */
+    public static int elytraEquipDelay = 50;
+    /** Режим работы: "excellent" или "monoton" */
+    public static String elytraEquipMode = "monoton";
 
-    // FastSwap
-    public static boolean fastSwapEnabled = false;
-    /** Задержка между действиями (миллисекунды) */
-    public static int fastSwapDelay = 50;
-    /** Название предмета 1 (например "wind_charge" или "wind charge") */
-    public static String fastSwapItem1Name = "wind_charge";
-    /** Задержка зарядки 1 */
-    public static int fastSwapItem1Delay = 50;
-    /** KeyCode для FastSwap 1 */
-    public static int fastSwapItem1KeyCode = 282; // GLFW.GLFW_KEY_F1
-    /** Название предмета 2 */
-    public static String fastSwapItem2Name = "ender_pearl";
-    /** Задержка зарядки 2 */
-    public static int fastSwapItem2Delay = 50;
-    /** KeyCode для FastSwap 2 */
-    public static int fastSwapItem2KeyCode = 283; // GLFW.GLFW_KEY_F2
-    /** Название предмета 3 */
-    public static String fastSwapItem3Name = "elytra";
-    /** Задержка зарядки 3 */
-    public static int fastSwapItem3Delay = 50;
-    /** KeyCode для FastSwap 3 */
-    public static int fastSwapItem3KeyCode = 284; // GLFW.GLFW_KEY_F3
+    // monoton mode extras (ported from ElytraHelper)
+    public static boolean elytraAutoJump = true;            // Авто-прыжок
+    public static boolean elytraAutoFly = true;             // Авто-взлёт при падении
+    public static boolean elytraAutoFirework = false;       // Автоматически использовать фейерверк
+    public static boolean elytraAutoFireworkStart = false;  // Только при взлёте
+    public static String elytraFireworkKey = "f";          // кнопка для фейерверка
+    public static boolean elytraSwapToOffhand = true;       // использовать фейр в левую руку
+
 }

@@ -8,6 +8,7 @@ import org.lwjgl.glfw.GLFW;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.minecraft.client.option.KeyBinding;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import auto.shulker.razstr.team.ElytraEquipLogic;
 
 public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
 
@@ -31,7 +32,7 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
         Keybinds.registerKeybinds();
 
         AutoCat.INSTANCE.register();
-        FastSwapLogic.INSTANCE.register();
+        ElytraEquipLogic.INSTANCE.register();
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             while (Keybinds.OPEN_GUI.wasPressed()) {
@@ -41,21 +42,6 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
                 AutoCat.INSTANCE.onKeyZeroPressed(client);
             }
 
-            // Обработка FastSwap горячих клавиш (по сконфигурированным клавишам)
-            if (client.options != null) {
-                // Проверяем item 1
-                if (isKeyPressed(client, ModConfig.fastSwapItem1KeyCode)) {
-                    FastSwapLogic.INSTANCE.triggerFastSwap(client, 1);
-                }
-                // Проверяем item 2
-                if (isKeyPressed(client, ModConfig.fastSwapItem2KeyCode)) {
-                    FastSwapLogic.INSTANCE.triggerFastSwap(client, 2);
-                }
-                // Проверяем item 3
-                if (isKeyPressed(client, ModConfig.fastSwapItem3KeyCode)) {
-                    FastSwapLogic.INSTANCE.triggerFastSwap(client, 3);
-                }
-            }
 
             AutoCat.INSTANCE.tick(client);
             AutoShulkerFarmLogic.INSTANCE.tick(client);

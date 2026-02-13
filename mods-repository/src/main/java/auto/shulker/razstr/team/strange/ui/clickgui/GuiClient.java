@@ -4,7 +4,6 @@ import net.minecraft.client.gui.DrawContext;
 import net.minecraft.client.gui.screen.Screen;
 import net.minecraft.text.Text;
 import org.lwjgl.glfw.GLFW;
-import auto.shulker.razstr.team.ChatCommand;
 import auto.shulker.razstr.team.ModConfig;
 import auto.shulker.razstr.team.strange.Strange;
 import auto.shulker.razstr.team.strange.module.Theme;
@@ -121,18 +120,6 @@ public class GuiClient extends Screen {
             }
         }
 
-        // Обработка команды .bind локально (НЕ отправляется в чат!)
-        if (keyCode == GLFW.GLFW_KEY_ENTER && currentCommand.startsWith(".bind ")) {
-            ChatCommand.handleCommand(currentCommand);
-            currentCommand = "";
-            return true;
-        }
-
-        // Удаляем последний символ команды при Backspace
-        if (keyCode == GLFW.GLFW_KEY_BACKSPACE && currentCommand.length() > 0) {
-            currentCommand = currentCommand.substring(0, currentCommand.length() - 1);
-            return true;
-        }
 
         return super.keyPressed(keyCode, scanCode, modifiers);
     }
