@@ -6,13 +6,13 @@ import net.fabricmc.api.ModInitializer;
 import net.minecraft.client.MinecraftClient;
 import org.lwjgl.glfw.GLFW;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
-import net.minecraft.client.option.KeyMapping;
+import net.minecraft.client.option.KeyBinding;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import auto.shulker.razstr.team.ElytraEquipLogic;
 
 public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
 
-    public static KeyMapping autoCatKey;
+    public static KeyBinding autoCatKey;
 
     @Override
     public void onInitialize() {
@@ -21,7 +21,7 @@ public class AutoShulkerSpooky implements ModInitializer, ClientModInitializer {
 
     @Override
     public void onInitializeClient() {
-        autoCatKey = new KeyMapping(
+        autoCatKey = new KeyBinding(
                 "key.autoshulker.auto_cat",
                 GLFW.GLFW_KEY_0,
                 "category.autoshulker"
